@@ -7,13 +7,256 @@ use std::io::{Write, BufReader, BufRead, ErrorKind}; //Podemos importar multiplo
 use std::fs::File;
 use std::cmp::Ordering;
 
-
-// Stack: Stores values in a LIFO - Last In First Out ||
-// Heap:
-
-fn main() {
+//35
+//Smart pointers
+fn main(){
     
 }
+
+
+
+//34
+//Closures
+// fn main(){
+//     //let var_name = |parameters| -> return_type {Body}
+//     //Closures can access variables outside of it's scope.
+
+//     fn use_func<T>(a: i32, b: i32, func: T) -> i32 where T: Fn(i32, i32) -> i32 {
+//         func(a,b)
+//     }
+
+//     let sum = |a, b| a+b;
+//     let prod = |a, b| a*b;
+//     println!("5 + 4 = {}", use_func(5,4,sum));
+//     println!("5 * 4 = {}", use_func(5, 4, prod));
+
+// //=============================================
+
+//     // let mut samp1 = 5;
+//     // let print_var = || println!("Samp1 = {}", samp1);
+
+//     // print_var();
+
+//     // samp1 = 10;
+//     // let mut change_var = || samp1 += 1;
+//     // change_var();
+//     // println!("Samp1 = {}", samp1);
+
+//     // samp1 = 10;
+//     // println!("Samp1 = {}", samp1);
+
+// //=============================================
+
+//     // let can_vote = |age: i32| {
+//     //     age >= 18
+//     // };
+
+//     // println!("Can vote : {}", can_vote(8));
+// }
+
+
+//33
+//Iterators
+// fn main(){
+//     //This will borrow values. You cannot make any changes to this values.
+//     let mut arr_it = [1,2,3,4];
+//     for val in arr_it.iter(){
+//         println!("{}", val);
+//     }
+
+//     let mut iter1 = arr_it.iter();
+//     println!("1st : {:?}", iter1.next());
+// }
+
+
+//32
+// fn main() {
+//     //Result has 2 variants Ok and Err
+//         //enum Result<T, E> {
+//         //Ok(T),
+//         //Err(E),}
+//         //Where T represents the data typeoff the value returns and E the type of error
+//     let path = "lines.txt";
+//     let output = File::create(path);
+//     let mut output = match output {
+//         Ok(file) => file,
+//         Err(error) =>{
+//             panic!("Problem creating file : {:?}", error);
+//         }
+//     };
+
+//     write!(output, "Just some\nRandom words").expect("Failed to write to file");
+
+//     let input = File::open(path).unwrap();
+//     let buffered = BufReader::new(input);
+
+//     for line in buffered.lines(){
+//         println!("{}", line.unwrap());
+//     }
+
+//     let output2 = File::create("rand.txt");
+//     let output2 = match output2 {
+//         Ok(file) => file,
+//         Err(error) => match error.kind(){
+//             ErrorKind::NotFound => match File::create("rand.txt"){
+//                 Ok(fc) => fc,
+//                 Err(e) => panic!("Can't create file: {:?}", error),
+//             },
+//             _other_error => panic!("Problem opening file: {:?}", error),
+//         }
+//     };
+
+//     //Forcing an error
+//     // let lil_arr = [1,2];
+//     // println!("{}", lil_arr[10]);
+// }
+
+
+//31
+//Using restaurant/mod to 'pack' all of its functionalities
+// mod restaurant;
+// use crate::restaurant::order_food;
+// fn main() {
+//     //Crates: Modules that produce a library or executable
+//     //Modules: Organize and handle privacy
+//     //Packages: Build, test and share crates
+//     //Paths: A way of naming an item such as a struct, function
+
+//     order_food();
+// }
+
+//30
+// fn main(){
+//     const PI: f32 = 3.141592;
+
+//     trait Shape{
+//         fn new(length: f32, width: f32) -> Self;
+//         fn area(&self) -> f32;
+//     }
+
+//     struct Rectangle{length: f32, width: f32};
+//     struct Circle{length: f32, width: f32};
+
+//     impl Shape for Rectangle{
+//         fn new(length: f32, width: f32) -> Rectangle{
+//             return Rectangle{length, width};
+//         }
+//         fn area(&self) -> f32{
+//             return self.length * self.width;
+//         }
+//     }
+
+//     impl Shape for Circle{
+//         fn new(length: f32, width: f32) -> Circle{
+//             return Circle{length, width};
+//         }
+//         fn area(&self) -> f32{
+//             return (self.length / 2.0).powf(2.0) * PI;
+//         }
+//     }
+
+//     let rec: Rectangle = Shape::new(10.0, 10.0);
+//     let circ: Circle = Shape::new(10.0, 10.0);
+
+//     println!("Rectangle Area : {}", rec.area());
+//     println!("Circle Area : {}", circ.area());
+
+//     // struct Rectangle<T, U> {
+//     //     length: T,
+//     //     height: U,
+//     // }
+
+//     // let rec = Rectangle {
+//     //     length: 4,
+//     //     height: 10.5
+//     // };
+
+//     // struct Customer {
+//     //     name: String,
+//     //     address: String,
+//     //     balance: f32,
+//     // }
+
+//     // let mut bob = Customer{
+//     //     name: String::from("Bob Singer"),
+//     //     address: String::from("555 Main St"),
+//     //     balance: 234.50
+//     // };
+
+//     // bob.address = String::from("505 Main St");
+// }
+
+
+//29
+//HashMaps it's kind of mapping in solidity. But you can iterate over.
+// use std::collections::HashMap;
+// fn main(){
+//     let mut heroes: HashMap<&str, &str> = HashMap::new();
+//     heroes.insert("Superman", "Clark Kent");
+//     heroes.insert("Batman", "Bruce Wayne");
+//     heroes.insert("Flash", "Barry Allen");
+
+//     for(k, v) in heroes.iter(){
+//         println!("{} = {}", k, v);
+//     }
+
+//     println!("Length : {}", heroes.len());
+
+//     if heroes.contains_key(&"Batman"){
+//         let the_batman = heroes.get(&"Batman");
+//         match the_batman {
+//             Some(x) => println!("Batman is a hero"),
+//             None => println!("Batman is not a hero"),
+//         }
+//     }
+// }
+
+
+//28
+// fn print_str(x: String){
+//     println!("A string {}", x);
+// }
+
+// fn print_return_str(x: String) -> String {
+//     println!("A string {}", x);
+//     x
+// }
+
+// fn change_string(name: &mut String){
+//     name.push_str(" is happy");
+//     println!("Message : {}", name);
+// }
+
+// fn main() {
+//     // let str1 = String::from("World");
+//     // let str2 = str1.clone();
+//     // // print_str(str1);
+//     // let str3 = print_return_str(str1);
+//     // println!("str3 = {}", str3);
+
+//     let mut str1 = String::from("Barba");
+//     change_string(&mut str1);
+// }
+
+//27
+// Stack: Stores values in a LIFO - Last In First Out || Data on the stack must have a defined fixed size
+// Heap: When putting data on the heap you request a certaing amount of space.
+// The OS finds space available and returns an address for that space called a pointer
+
+// RULES
+//1. Each value has a variable that's called its owner
+//2. there is only one owner at a time
+//3. When the owner goes out of scope the value disappears
+
+// fn main() {
+    // let str1 = String::from("World");
+    // let str2 = str1;
+    // println!("Hello {}", str1); This will give an error because str1 doesn't exist anymore. str1 was absorved by str2.
+
+    // let str1 = String::from("World");
+    // let str2 = str1.clone(); //This only applies for Strings, Tupples, Arrays and Vectors
+    // println!("Hello {}", str1); //Now it's working because we copied str1 into str2. We don't "absorved" it.
+// }
 
 
 //26
