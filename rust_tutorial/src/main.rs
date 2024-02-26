@@ -1,17 +1,143 @@
+//First Steps
+// cargo new ~Project_name~
+// dir
+// cd ~Project_name~
+
 #![allow(unused)]
 
 use core::num;
-use std::io; //para baixar todos os arquivos publicos da biblioteca usamos: `use std::io::*;`
+use std::io;
+use std::time::Duration; //para baixar todos os arquivos publicos da biblioteca usamos: `use std::io::*;`
 use rand::Rng; //para verificar a versão da biblioteca vamos à https://crates.io/ e pesquisamos por `rand`
 use std::io::{Write, BufReader, BufRead, ErrorKind}; //Podemos importar multiplos arquivos, se precisarmos.
 use std::fs::File;
 use std::cmp::Ordering;
 
-//35
-//Smart pointers
-fn main(){
-    
+//36
+//Concurrency & Thread
+//Real world example
+use std::thread;
+use std::rc::Rc;
+use std::cell::RefCell;
+use std::sync::{Arc, Mutex};
+fn main() {
+    pub struct Bank {
+        balance: f32
+    }
+
+    fn withdraw(the_bank: &Arc<Mutex<Bank>>, amt: f32){
+        let mut bank_ref = the_bank.lock().unwrap();
+        if bank_ref.balance < 5.00{
+            println!("Current Balance : {} Withdrawal a smaller amount", bank_ref.balance);
+        } else {
+            bank_ref.balance -= amt;
+            println!("Customer withdrew {} Current Balance {}", amt, bank_ref.balance);
+        }
+    }
+
+    fn customer(the_bank: Arc<Mutex<Bank>>){
+        withdraw(&the_bank, 5.00);
+    }
+
+    let bank: Arc<Mutex<Bank>> = Arc::new(Mutex::new(Bank {balance: 20.00}));
+
+    let handles = (0..10).map(|_|{
+        let bank_ref = bank.clone();
+        thread::spawn(|| {
+            customer(bank_ref)
+        })
+    });
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Total {}", bank.lock().unwrap().balance);
+
+
+    //This won't work because we need a smart pointer to access the data.
+    // fn withdraw(the_bank: &mut Bank, amt: f32){
+    //     the_bank.balance -= amt;
+    // }
+
+    // let mut bank = Bank{balance: 100.00};
+    // withdraw(&mut bank, 5.00);
+    // println!("Balance : {}", bank.balance);
+
+    // fn customer(the_bank: &mut Bank){
+    //     withdraw(the_bank, 5.00);
+    // }
+
+    // thread::spawn(|| {
+    //     customer(&mut bank)
+    // }).join().unwrap(); 
+
 }
+
+
+
+//35
+// use std::thread;
+// use std::time; //In the video he imports like `use std::time:Duration;`, however, something change recently and now I just need to do `use std::time;`
+// fn main(){
+    // // Commom problems with parallel programming involve
+    //     //1. Thread are accessing data in the wrong order.
+    //     //2. Threads are blocked from executing because of confusion
+    //     // over requirements to proceed with execution
+    // let thread1 = thread::spawn(|| {
+    //     for i in 1..25 {//This prints only 21 times instead of 24 as declared. 
+    //         println!("Spawn thread : {}", i);// In this form there is no garantie that the thread will be completed, as mentioned above.
+    //         thread::sleep(Duration::from_millis(1));
+    //     }
+    // });
+
+    // for i in 1..20{
+    //     println!("Main thread : {}", i);
+    //     thread::sleep(Duration::from_millis(1));
+    // }
+
+    // thread1.join().unwrap(); //This will garantie the fully execution
+// }
+
+
+//35
+//Smart pointers & Box
+// fn main(){    
+    //& reference operator | Box<>>
+    //Box is normlally used when you have a large amount of data storage in the heap and then to pass pointers to it in the stack
+
+    // =============================================
+    
+    // struct TreeNode<T> {
+    //     pub left: Option<Box<TreeNode<T>>>,
+    //     pub right: Option<Box<TreeNode<T>>>,
+    //     pub key: T,
+    // }
+    
+    // impl<T> TreeNode<T> {
+    //     pub fn new(key: T) -> Self{
+    //         TreeNode {
+    //             left: None, right: None, key,
+    //         }
+    //     }
+    //     pub fn left(mut self, node: TreeNode<T>) -> Self{
+    //         self.left = Some(Box::new(node));
+    //         self
+    //     }
+    //     pub fn right(mut self, node: TreeNode<T>) -> Self{
+    //         self.right = Some(Box::new(node));
+    //         self
+    //     }
+    // }
+
+    // let node1 = TreeNode::new(1).left(TreeNode::new(2)).right(TreeNode::new(3));
+
+    // =============================================
+
+    // let b_int1 = Box::new(10);
+    // println!("b_int1 = {}", b_int1);
+    
+// }
 
 
 
